@@ -1,39 +1,43 @@
 module.exports = function getZerosCount(number, base) {
-var k = 1;
-var str="";
-var number =100;
-var base = 8;
-  if(number<base)
-     str = ""+number;
-     else{
-             celoe = Math.floor(number/base);
-             ost = number - celoe*base;
-             str+=ost;
-             while(celoe>base){
-                 celoe = Math.floor(number/base);
-                 ost = celoe - celoe*base;
-                 str+=celoe;
 
-             }
-             
+   var primeNumbers = [];
+   var factorsList = [];
+   var resultsArray = [];
+   var counter = 0;
+   
+   label:for(var i=2;i<255;i++){
+      for(var j=2;j<255;j++)
+      if(i!=j && i % j ==0)
+        continue label;
+      primeNumbers.push(i);
+   }
+
+   while(base!=1){
+      while(base % primeNumbers[counter] == 0){
+         factorsList.push(primeNumbers[counter]);
+         base/=primeNumbers[counter];
       }
+      counter++;
+   }
+   
+   var uniquefactorsList = factorsList.reduce(function(previousValue, item){
+      previousValue[item] = (previousValue[item] || 0) + 1;
+      return previousValue;
+   },{});
 
-  console.log("Answer:"+str.split("").reverse().join(""));
+   counter = 1;
 
+   function recursive(key,counter){
+      if(number<Math.pow(+key,counter))
+       return 0;
+       return Math.floor(number/Math.pow(+key,counter))+recursive(+key,counter+1);
+   }
 
+   for(key in uniquefactorsList){
+      resultsArray.push(Math.floor(recursive(key,counter)/uniquefactorsList[key]));
+      counter = 1;
+   }
 
+  return Math.min.apply(null, resultsArray);
 
-
-function rec(k){
-     if(param<Math.pow(5,k))
-      return 0;
-      return Math.floor(param/Math.pow(5,k))+rec(k+1);
-
-}
-
-var result = rec(k);
-
-console.log("answer: "+result);
-
-return result
 }
